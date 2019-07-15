@@ -43,6 +43,47 @@ const PlayIntentHandler = {
             .getResponse();
     }
 };
+const PauseIntentHandler = {
+    canHandle(handlerInput) {
+        const request = handlerInput.requestEnvelope.request;
+        return (request.type === 'IntentRequest' && request.intent.name === 'AMAZON.PauseIntent');
+    },
+    async handle(handlerInput) {
+        return handlerInput.responseBuilder
+            //.speak('サンプルを中断します。')
+            .getResponse();
+    }
+};
+const ResumeIntentHandler = {
+    canHandle(handlerInput) {
+        const request = handlerInput.requestEnvelope.request;
+        return (request.type === 'IntentRequest' && request.intent.name === 'AMAZON.ResumeIntent');
+    },
+    async handle(handlerInput) {
+        const url = util.getS3PreSignedUrl('Cat_life.mp3')
+        const AudioPlayer = handlerInput.requestEnvelope.context.AudioPlayer;
+        const token = AudioPlayer.token;
+        const offset = AudioPlayer.offsetInMilliseconds;
+        return handlerInput.responseBuilder
+            .addAudioPlayerPlayDirective('REPLACE_ALL', url, token, offset, null)
+            //.speak('サンプルを再開します。')
+            .getResponse();
+    }
+};
+const PlaybackHandler = {
+    canHandle(h) {
+        const type = h.requestEnvelope.request.type;
+        return (type == 'AudioPlayer.PlaybackStarted' || // 再生開始
+            type == 'AudioPlayer.PlaybackFinished' || // 再生終了
+            type == 'AudioPlayer.PlaybackStopped' || // 再生停止
+            type == 'AudioPlayer.PlaybackNearlyFinished' || // もうすぐ再生終了
+            type == 'AudioPlayer.PlaybackFailed'); // 再生失敗
+    },
+    async handle(handlerInput) {
+        return handlerInput.responseBuilder
+            .getResponse();
+    }
+};
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -125,6 +166,9 @@ exports.handler = Alexa.SkillBuilders.custom()
         LaunchRequestHandler,
         HelloWorldIntentHandler,
         PlayIntentHandler,
+        PauseIntentHandler,
+        ResumeIntentHandler,
+        PlaybackHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
