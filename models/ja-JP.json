@@ -29,6 +29,13 @@
           ]
         },
         {
+          "name": "PlayIntent",
+          "slots": [],
+          "samples": [
+            "音楽かけて"
+          ]
+        },
+        {
           "name": "AMAZON.NavigateHomeIntent",
           "samples": []
         },

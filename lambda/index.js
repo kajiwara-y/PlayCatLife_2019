@@ -2,6 +2,7 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const util = require('./util.js')
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -25,6 +26,20 @@ const HelloWorldIntentHandler = {
         return handlerInput.responseBuilder
             .speak(speechText)
             //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .getResponse();
+    }
+};
+const PlayIntentHandler = {
+    canHandle(handlerInput) {
+        const request = handlerInput.requestEnvelope.request;
+        return (request.type === 'IntentRequest' && request.intent.name === 'PlayIntent');
+    },
+    async handle(handlerInput) {
+        const url = util.getS3PreSignedUrl('Cat_life.mp3')
+        const token = "sample";
+        return handlerInput.responseBuilder
+            .addAudioPlayerPlayDirective('REPLACE_ALL', url, token, 0, null)
+            //.speak('サンプルを再生します。')
             .getResponse();
     }
 };
@@ -109,6 +124,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
         HelloWorldIntentHandler,
+        PlayIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
