@@ -1,0 +1,23 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:040241532234:function:728b5bb3-8e79-4e2f-a656-6586f71a4c47:Release_0"
+        },
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
+      }
+    },
+    "publishingInformation": {
+      "locales": {
+        "ja-JP": {
+          "name": "PlayCatLife"
+        }
+      }
+    }
+  }
+}
