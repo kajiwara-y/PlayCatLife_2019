@@ -35,7 +35,7 @@ const PlayIntentHandler = {
         return (request.type === 'IntentRequest' && request.intent.name === 'PlayIntent');
     },
     async handle(handlerInput) {
-        const url = util.getS3PreSignedUrl('Cat_life.mp3')
+        const url = 'https://alexa-tama-img.s3-ap-northeast-1.amazonaws.com/Cat_life.mp3'
         const token = "sample";
         return handlerInput.responseBuilder
             .addAudioPlayerPlayDirective('REPLACE_ALL', url, token, 0, null)
@@ -60,7 +60,7 @@ const ResumeIntentHandler = {
         return (request.type === 'IntentRequest' && request.intent.name === 'AMAZON.ResumeIntent');
     },
     async handle(handlerInput) {
-        const url = util.getS3PreSignedUrl('Cat_life.mp3')
+        const url = 'https://alexa-tama-img.s3-ap-northeast-1.amazonaws.com/Cat_life.mp3'
         const AudioPlayer = handlerInput.requestEnvelope.context.AudioPlayer;
         const token = AudioPlayer.token;
         const offset = AudioPlayer.offsetInMilliseconds;
